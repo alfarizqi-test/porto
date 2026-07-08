@@ -1,0 +1,46 @@
+body {
+    font-family: 'JetBrains Mono', monospace;
+}
+
+/* Scrollbar configuration for Gruvbox */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #1d2021;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #504945;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #665c54;
+}
+
+/* Animations */
+.fade-in {
+    animation: fadeIn 200ms ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Syntax Highlighting Colors */
+.syntax-keyword { color: #fb4934; }
+.syntax-string { color: #b8bb26; }
+.syntax-function { color: #83a598; }
+.syntax-comment { color: #928374; }
+.syntax-number { color: #d3869b; }
+.syntax-property { color: #8ec07c; }

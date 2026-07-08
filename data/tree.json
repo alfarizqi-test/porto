@@ -1,0 +1,114 @@
+[
+  {
+    "name": "About",
+    "filename": "about.md",
+    "type": "profile",
+    "language": "markdown",
+    "icon": "📄",
+    "content": {
+        "name": "Alfarizqi Himam Harakan (Architect)",
+        "role": "Backend & Infrastructure Engineer",
+        "about": "Systems enthusiast focusing on robust backend architecture, cloud deployment, and security auditing. I use Arch Linux as my daily driver and prefer building minimal, highly efficient workflows.",
+        "skills": "Linux, Rust, Laravel, Security Auditing",
+        "contact": "alfarizqi.stura@gmail.com"
+    }
+  },
+  {
+    "name": "Skills",
+    "filename": "skills.json",
+    "type": "skills",
+    "language": "json",
+    "icon": "{}",
+    "content": {
+        "languages": ["Rust", "PHP", "JavaScript", "Dart", "C (Basics)"],
+        "backend": ["Laravel", "Axum", "REST API", "Supabase"],
+        "linux": ["Arch Linux", "Hyprland", "Bash", "Docker", "VPS Management"],
+        "frontend": ["Tailwind CSS", "Next.js", "Flutter"]
+    }
+  },
+  {
+    "name": "Projects",
+    "type": "folder",
+    "icon": "📁",
+    "children": [
+      {
+        "name": "Aegis",
+        "filename": "aegis.rs",
+        "type": "project",
+        "language": "rust",
+        "icon": "🦀",
+        "title": "Aegis - Security Auditor",
+        "description": "Lightweight passive vulnerability scanner and DevSecOps tool.",
+        "stack": ["Rust", "CLI"],
+        "github": "https://github.com/yourusername/aegis",
+        "features": ["Security Headers Check", "Ethical Safeguard Flags", "Misconfiguration Detection"]
+      },
+      {
+        "name": "UMKM POS",
+        "filename": "umkm-pos.php",
+        "type": "project",
+        "language": "php",
+        "icon": "🐘",
+        "title": "UMKM Point of Sales & Ordering",
+        "description": "Full-stack food ordering and management application.",
+        "stack": ["Laravel", "Flutter", "Supabase"],
+        "github": "https://github.com/yourusername/umkm-pos",
+        "features": ["Relational Database", "Mobile API Integration", "Real-time Sync"]
+      },
+      {
+        "name": "Portfolio",
+        "filename": "portfolio.js",
+        "type": "project",
+        "language": "javascript",
+        "icon": "💛",
+        "title": "Architect Portfolio",
+        "description": "Yazi-inspired modern Terminal UI (TUI) web portfolio.",
+        "stack": ["HTML", "TailwindCSS", "Vanilla JS"],
+        "github": "https://github.com/yourusername/tui-portfolio",
+        "features": ["Virtual File System", "Keyboard Navigation", "Catppuccin/Gruvbox Theme"]
+      }
+    ]
+  },
+  {
+    "name": "Contact",
+    "type": "folder",
+    "icon": "📁",
+    "children": [
+      {
+        "name": "github.url",
+        "filename": "github.url",
+        "type": "url",
+        "url": "https://github.com/yourusername",
+        "icon": "🌐"
+      },
+      {
+        "name": "linkedin.url",
+        "filename": "linkedin.url",
+        "type": "url",
+        "url": "https://linkedin.com/in/alfarizqihimam",
+        "icon": "🌐"
+      }
+    ]
+  },
+  {
+    "name": "Resume",
+    "filename": "resume.pdf",
+    "type": "resume",
+    "language": "text",
+    "icon": "📕",
+    "content": {
+        "experience": [
+            "Independent Security Researcher (2025-2026) - Discovered & reported SQLi and Session Hijacking vulnerabilities on school systems.",
+            "Vocational Workshop Co-Instructor (May 2025) - Organized and instructed technical materials for workers.",
+            "Cloud Deployment Engineer @ #JuaraVibeCoding (2026) - Deployed Gen-AI integrated applications to Google Cloud Run."
+        ],
+        "education": [
+            "Vocational High School (SMK) - SMK Muhammadiyah Kajen (Expected Graduation: 2027)",
+            "IDCamp 2025 - AI Front-End Developer (Expert Level)"
+        ],
+        "achievements": [
+            "Bronze Medalist - National OlympicAD (Web Development Category, Feb 2026)"
+        ]
+    }
+  }
+]

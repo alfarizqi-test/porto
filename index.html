@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alfarizqi Himam Harakan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="bg-[#1d2021] text-[#ebdbb2] font-mono h-screen flex flex-col overflow-hidden relative selection:bg-[#504945] selection:text-[#ebdbb2]">
+    
+    <!-- Overlay for Help, Search, Command -->
+    <div id="overlay" class="absolute inset-0 z-50 bg-black/50 flex flex-col items-center justify-center hidden pointer-events-none"></div>
+
+    <!-- Header -->
+    <header class="border-b border-[#504945] p-2 text-sm flex justify-between bg-[#282828] text-[#a89984]">
+        <a href="/"><span>Portfolio TUI</span></a>
+        <span id="breadcrumb" class="text-[#83a598]">~/portfolio</span>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex overflow-hidden flex-col md:flex-row relative">
+        <!-- Sidebar Panel -->
+        <aside id="sidebar-panel" class="w-full md:w-1/4 lg:w-1/5 border-r border-[#504945] flex flex-col bg-[#282828] transition-all duration-200">
+            <div class="p-2 border-b border-[#504945] text-[#83a598] font-bold">portfolio/</div>
+            <div id="sidebar" class="flex-1 overflow-y-auto py-2">
+                <!-- Sidebar items -->
+            </div>
+        </aside>
+
+        <!-- Navigator Panel -->
+        <section id="navigator-panel" class="w-full md:w-1/3 lg:w-1/4 border-r border-[#504945] flex flex-col bg-[#1d2021] transition-all duration-200">
+            <div id="navigator-title" class="p-2 border-b border-[#504945] text-[#b8bb26] font-bold">~</div>
+            <div id="navigator" class="flex-1 overflow-y-auto py-2">
+                <!-- Navigator items -->
+            </div>
+        </section>
+
+        <!-- Viewer Panel -->
+        <section id="viewer-panel" class="flex-1 flex flex-col bg-[#1d2021] min-w-0 transition-all duration-200">
+            <div id="viewer-title" class="p-2 border-b border-[#504945] text-[#fabd2f] font-bold">preview</div>
+            <div id="viewer" class="flex-1 overflow-y-auto">
+                <!-- Viewer content -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Status Bar -->
+    <footer class="border-t border-[#504945] flex flex-wrap text-xs bg-[#282828] font-bold">
+        <div id="status-mode" class="px-3 py-1 bg-[#b8bb26] text-[#1d2021]">NORMAL</div>
+        <div class="px-3 py-1 border-r border-[#504945] text-[#ebdbb2] hidden sm:block">alfarizqi.stura@gmail.com</div>
+        <div id="status-file" class="px-3 py-1 border-r border-[#504945] text-[#83a598]">portfolio</div>
+        <div id="status-type" class="px-3 py-1 border-r border-[#504945] text-[#d3869b]">DIR</div>
+        <div id="status-panel" class="px-3 py-1 border-r border-[#504945] text-[#a89984]">sidebar</div>
+        <div class="px-3 py-1 border-r border-[#504945] ml-auto text-[#a89984]">UTF-8</div>
+        <div class="px-3 py-1 bg-[#83a598] text-[#1d2021]">100%</div>
+    </footer>
+
+    <script type="module" src="assets/js/app.js"></script>
+</body>
+</html>

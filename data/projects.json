@@ -1,0 +1,26 @@
+[
+  {
+    "id": "rakshaka",
+    "title": "Rakshaka",
+    "description": "Rust Backend Link Checker",
+    "tech": ["Rust", "Axum", "SQLx"]
+  },
+  {
+    "id": "aegis",
+    "title": "Aegis",
+    "description": "Pentest Assistant with AI",
+    "tech": ["Rust", "AI", "Security"]
+  },
+  {
+    "id": "rust-api",
+    "title": "Rust API Tool",
+    "description": "TUI API Testing Tool",
+    "tech": ["Rust", "Ratatui"]
+  },
+  {
+    "id": "portfolio",
+    "title": "Portfolio",
+    "description": "Terminal Style Portfolio",
+    "tech": ["HTML", "TailwindCSS", "JS"]
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "id": "rust-ownership",
+    "title": "Understanding Rust Ownership",
+    "date": "2024-05-12",
+    "content": "# Understanding Rust Ownership\n\nOwnership is a set of rules that govern how a Rust program manages memory..."
+  },
+  {
+    "id": "axum-rest-api",
+    "title": "Building a REST API with Axum",
+    "date": "2024-06-01",
+    "content": "# Building a REST API with Axum\n\nAxum is a web application framework that focuses on ergonomics and modularity..."
+  }
+]

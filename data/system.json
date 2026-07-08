@@ -1,0 +1,15 @@
+{
+  "os": "Arch Linux",
+  "kernel": "6.8.9-arch1-1",
+  "wm": "Hyprland",
+  "terminal": "Kitty",
+  "shell": "fish",
+  "editor": "Neovim",
+  "browser": "Firefox",
+  "cpu": "Intel core i3 gen 10",
+  "memory": "12 GB",
+  "packages": "1420 (pacman)",
+  "languages": ["Rust", "PHP", "JavaScript"],
+  "backend": ["Axum", "Laravel", "Docker"],
+  "projects": ["Rakshaka", "Portfolio", "Notes App"]
+}

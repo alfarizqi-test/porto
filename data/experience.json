@@ -1,0 +1,14 @@
+[
+  {
+    "company": "Freelance",
+    "role": "Backend Engineer",
+    "stack": ["Rust", "Laravel", "Docker"],
+    "period": "2024-now"
+  },
+  {
+    "company": "Tech Corp",
+    "role": "Software Developer",
+    "stack": ["PHP", "JavaScript", "MySQL"],
+    "period": "2022-2024"
+  }
+]
