@@ -1,71 +1,78 @@
 import { escapeHtml } from '../renderers/utils.js';
 
+const renderTokens = (text) => {
+    return text
+        .replace(/__RED__/g, '<span class="text-[#fb4934]">')
+        .replace(/__GRN__/g, '<span class="text-[#b8bb26]">')
+        .replace(/__AQU__/g, '<span class="text-[#8ec07c]">')
+        .replace(/__PUR__/g, '<span class="text-[#d3869b]">')
+        .replace(/__BLU__/g, '<span class="text-[#83a598]">')
+        .replace(/__GRY__/g, '<span class="text-[#928374]">')
+        .replace(/__END__/g, '</span>');
+};
+
 export const rust = (content) => {
     let formatted = escapeHtml(content);
-    formatted = formatted.replace(/"(.*?)"/g, '<span class="text-[#b8bb26]">"$1"</span>');
+    formatted = formatted.replace(/"(.*?)"/g, '__GRN__"$1"__END__');
     const keywords = ['struct', 'fn', 'let', 'mut', 'impl', 'pub', 'return', 'String', 'Vec', 'Option', 'Some', 'None'];
     keywords.forEach(kw => {
         const regex = new RegExp(`\\b${kw}\\b`, 'g');
-        formatted = formatted.replace(regex, `<span class="text-[#fb4934]">${kw}</span>`);
+        formatted = formatted.replace(regex, `__RED__${kw}__END__`);
     });
-    formatted = formatted.replace(/\b([a-z_]+!)/g, '<span class="text-[#8ec07c]">$1</span>');
-    formatted = formatted.replace(/#\[(.*?)\]/g, '<span class="text-[#d3869b]">#[$1]</span>');
-    
-    return formatted;
+    formatted = formatted.replace(/\b([a-z_]+!)/g, '__AQU__$1__END__');
+    formatted = formatted.replace(/#\[(.*?)\]/g, '__PUR__#[$1]__END__');
+    return renderTokens(formatted); 
 };
 
 export const javascript = (content) => {
     let formatted = escapeHtml(content);
-    formatted = formatted.replace(/"(.*?)"/g, '<span class="text-[#b8bb26]">"$1"</span>');
-    formatted = formatted.replace(/'(.*?)'/g, '<span class="text-[#b8bb26]">\'$1\'</span>');
-    formatted = formatted.replace(/`(.*?)`/g, '<span class="text-[#b8bb26]">\`$1\`</span>');
-    formatted = formatted.replace(/(\/\*\*[\s\S]*?\*\/)/g, '<span class="text-[#928374]">$1</span>');
+    formatted = formatted.replace(/"(.*?)"/g, '__GRN__"$1"__END__');
+    formatted = formatted.replace(/'(.*?)'/g, '__GRN__\'$1\'__END__');
+    formatted = formatted.replace(/`(.*?)`/g, '__GRN__`$1`__END__');
+    formatted = formatted.replace(/(\/\*\*[\s\S]*?\*\/)/g, '__GRY__$1__END__');
     const keywords = ['const', 'let', 'var', 'function', 'return', 'import', 'export', 'class', 'default', 'this'];
     keywords.forEach(kw => {
         const regex = new RegExp(`\\b${kw}\\b`, 'g');
-        formatted = formatted.replace(regex, `<span class="text-[#fb4934]">${kw}</span>`);
+        formatted = formatted.replace(regex, `__RED__${kw}__END__`);
     });
-    formatted = formatted.replace(/\b([a-zA-Z_0-9]+)(?=\()/g, '<span class="text-[#8ec07c]">$1</span>');
-    
-    return formatted;
+    formatted = formatted.replace(/\b([a-zA-Z_0-9]+)(?=\()/g, '__AQU__$1__END__');
+    return renderTokens(formatted);
 };
 
 export const php = (content) => {
     let formatted = escapeHtml(content);
-    formatted = formatted.replace(/"(.*?)"/g, '<span class="text-[#b8bb26]">"$1"</span>');
-    formatted = formatted.replace(/'(.*?)'/g, '<span class="text-[#b8bb26]">\'$1\'</span>');
-    formatted = formatted.replace(/(&lt;\?php)/g, '<span class="text-[#fb4934]">$1</span>');
-    formatted = formatted.replace(/(\/\*\*[\s\S]*?\*\/)/g, '<span class="text-[#928374]">$1</span>');
-    formatted = formatted.replace(/(\$[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)/g, '<span class="text-[#8ec07c]">$1</span>');
+    formatted = formatted.replace(/"(.*?)"/g, '__GRN__"$1"__END__');
+    formatted = formatted.replace(/'(.*?)'/g, '__GRN__\'$1\'__END__');
+    formatted = formatted.replace(/(\/\*\*[\s\S]*?\*\/)/g, '__GRY__$1__END__');
+    formatted = formatted.replace(/(&lt;\?php)/g, '__RED__$1__END__');
+    formatted = formatted.replace(/(\$[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)/g, '__AQU__$1__END__');
     const keywords = ['class', 'function', 'public', 'private', 'protected', 'return', 'namespace', 'use', 'array', 'string'];
     keywords.forEach(kw => {
         const regex = new RegExp(`\\b${kw}\\b`, 'g');
-        formatted = formatted.replace(regex, `<span class="text-[#fb4934]">${kw}</span>`);
+        formatted = formatted.replace(regex, `__RED__${kw}__END__`);
     });
-    
-    return formatted;
+    return renderTokens(formatted); 
 };
 
 export const json = (content) => {
     let formatted = escapeHtml(content);
-    formatted = formatted.replace(/"(.*?)":/g, '<span class="text-[#83a598]">"$1"</span>:');
-    formatted = formatted.replace(/: "(.*?)"/g, ': <span class="text-[#b8bb26]">"$1"</span>');
-    return formatted;
+    formatted = formatted.replace(/"(.*?)":/g, '__BLU__"$1"__END__:');
+    formatted = formatted.replace(/: "(.*?)"/g, ': __GRN__"$1"__END__');
+    return renderTokens(formatted);
 };
 
 export const yaml = (content) => {
     let formatted = escapeHtml(content);
-    formatted = formatted.replace(/^([\s-]*)([\w-]+):/gm, '$1<span class="text-[#83a598]">$2</span>:');
-    return formatted;
+    formatted = formatted.replace(/^([\s-]*)([\w-]+):/gm, '$1__BLU__$2__END__:');
+    return renderTokens(formatted);
 };
 
 export const toml = (content) => {
     let formatted = escapeHtml(content);
-    // Strings didahulukan di TOML
-    formatted = formatted.replace(/"(.*?)"/g, '<span class="text-[#b8bb26]">"$1"</span>');
-    formatted = formatted.replace(/^\[(.*?)\]/gm, '<span class="text-[#8ec07c]">[$1]</span>');
-    formatted = formatted.replace(/^([\w-]+)\s*=/gm, '<span class="text-[#83a598]">$1</span> =');
-    return formatted;
+    formatted = formatted.replace(/"(.*?)"/g, '__GRN__"$1"__END__');
+    formatted = formatted.replace(/^\[(.*?)\]/gm, '__AQU__[$1]__END__');
+    formatted = formatted.replace(/^([\w-]+)\s*=/gm, '__BLU__$1__END__ =');
+    return renderTokens(formatted);
 };
 
 export const markdown = (content) => {
