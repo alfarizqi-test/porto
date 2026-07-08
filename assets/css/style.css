@@ -44,3 +44,10 @@ body {
 .syntax-comment { color: #928374; }
 .syntax-number { color: #d3869b; }
 .syntax-property { color: #8ec07c; }
+
+.hidden-file-revealed {
+    opacity: 0.7;
+    font-style: italic;
+    color: #d3869b;
+    transition: all 0.3s ease;
+}

@@ -125,11 +125,17 @@ export const resume = (file) => {
     return applySyntax(file.language || 'text', rawText);
 };
 
+export const file = (node) => {
+    const rawText = node.content || '';
+    return applySyntax(node.language || 'text', rawText);
+};
+
 export const renderers = {
     root,
     profile,
     skills,
     project,
     url,
-    resume
+    resume,
+    file
 };

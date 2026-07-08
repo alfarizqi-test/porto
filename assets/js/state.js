@@ -12,6 +12,7 @@ export const state = {
     currentFile: null,
     helpVisible: false,
     systemInfo: null,
+    showHidden: false,
 };
 
 export const selectSidebar = (index) => {

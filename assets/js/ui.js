@@ -30,14 +30,18 @@ const renderSidebar = (currentTree) => {
     sidebar.innerHTML = '';
     
     currentTree.forEach((item, index) => {
+        if (item.hidden && !state.showHidden) return;
+
         const div = document.createElement('div');
         const isSelected = index === state.sidebarIndex;
         const isActivePanel = state.activePanel === 'sidebar';
+
+        const hiddenClass = item.hidden ? 'opacity-60 italic' : '';
         
         let bgClass = isSelected ? (isActivePanel ? 'bg-[#3c3836]' : 'bg-[#3c3836]') : 'hover:bg-[#3c3836]';
         let textClass = isSelected ? 'text-[#fabd2f]' : 'text-[#ebdbb2]';
         
-        div.className = `cursor-pointer px-2 py-1 flex items-center gap-2 ${bgClass} ${textClass}`;
+        div.className = `cursor-pointer px-2 py-1 flex items-center gap-2 ${bgClass} ${textClass} ${hiddenClass}`;
         div.innerHTML = `
             <span class="text-[#83a598]">${item.icon || '📄'}</span>
             <span>${item.name}</span>
