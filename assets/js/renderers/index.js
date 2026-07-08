@@ -11,44 +11,50 @@ const applySyntax = (language, rawText) => {
 };
 
 export const root = () => {
-    // Kamu bisa menghubungkan variabel ini dengan API dinamis jika ada,
-    // atau biarkan static seperti ini untuk performa TUI yang instan.
+    const systemInfo = state.systemInfo;
+    if (!systemInfo) return `<div class="p-4 text-[#928374]">// Loading system info...</div>`; 
     return `
     <div class="flex flex-col md:flex-row gap-8 p-4 font-mono text-sm fade-in items-center md:items-start">
         
         <!-- Left Section: Image Rendering -->
         <!-- Ganti src "./assets/waifu.png" dengan path gambar aslimu -->
         <div class="flex-shrink-0 drop-shadow-lg">
-            
+            <img 
+                src="./assets/waifu.png" 
+                alt="Avatar" 
+                class="w-52 h-auto object-contain rounded-md"
+            />
         </div>
 
         <!-- Right Section: Fastfetch System Info -->
         <div class="flex flex-col text-[#ebdbb2] leading-relaxed">
             
+            <div class="flex flex-col text-[#ebdbb2] leading-relaxed">
+            
             <!-- Software Information -->
             <div class="text-[#a89984] mb-1">╭──────── <span class="text-[#ebdbb2] font-bold">Software Information</span> ────────╮</div>
-            <div class="flex"><span class="text-[#8ec07c] w-28 ml-2"> User:</span> <span>Architect@Architect</span></div>
-            <div class="flex"><span class="text-[#8ec07c] w-28 ml-2">󰣇 OS:</span> <span>Arch Linux</span></div>
-            <div class="flex"><span class="text-[#8ec07c] w-28 ml-2"> Kernel:</span> <span>Linux 7.1.2-arch3-1</span></div>
-            <div class="flex"><span class="text-[#8ec07c] w-28 ml-2">󰏖 Packages:</span> <span>1344 (pacman)</span></div>
-            <div class="flex"><span class="text-[#8ec07c] w-28 ml-2"> WM:</span> <span>Hyprland 0.55.4 (Wayland)</span></div>
-            <div class="flex"><span class="text-[#8ec07c] w-28 ml-2"> Terminal:</span> <span>kitty 0.47.4</span></div>
+            <div class="flex"><span class="text-[#8ec07c] w-28 ml-2">User:</span> <span>Architect@Architect</span></div>
+            <div class="flex"><span class="text-[#8ec07c] w-28 ml-2">OS:</span> <span>${systemInfo.os}</span></div>
+            <div class="flex"><span class="text-[#8ec07c] w-28 ml-2">Kernel:</span> <span>${systemInfo.kernel}</span></div>
+            <div class="flex"><span class="text-[#8ec07c] w-28 ml-2">Packages:</span> <span>${systemInfo.packages}</span></div>
+            <div class="flex"><span class="text-[#8ec07c] w-28 ml-2">WM:</span> <span>${systemInfo.wm}</span></div>
+            <div class="flex"><span class="text-[#8ec07c] w-28 ml-2">Terminal:</span> <span>${systemInfo.terminal}</span></div>
             
             <!-- Hardware Information -->
             <div class="text-[#a89984] mt-2 mb-1">├──────── <span class="text-[#ebdbb2] font-bold">Hardware Information</span> ────────┤</div>
-            <div class="flex"><span class="text-[#8ec07c] w-28 ml-2"> CPU:</span> <span>Intel(R) Core(TM) i5-7200U (4) @ 3.10 GHz</span></div>
-            <div class="flex"><span class="text-[#8ec07c] w-28 ml-2">󰢮 GPU:</span> <span>NVIDIA GeForce 920MX</span></div>
-            <div class="flex"><span class="text-[#8ec07c] w-28 ml-2">󰢮 GPU:</span> <span>Intel HD Graphics 620</span></div>
-            <div class="flex"><span class="text-[#8ec07c] w-28 ml-2"> Memory:</span> <span>6.61 GiB / 11.58 GiB (57%)</span></div>
-            <div class="flex"><span class="text-[#8ec07c] w-28 ml-2"> Root:</span> <span>75.51 GiB / 100.62 GiB (75%)</span></div>
-            <div class="flex"><span class="text-[#8ec07c] w-28 ml-2">󰔚 Uptime:</span> <span>2 hours, 13 mins</span></div>
+            <div class="flex"><span class="text-[#8ec07c] w-28 ml-2">CPU:</span> <span>${systemInfo.cpu}</span></div>
+            <div class="flex"><span class="text-[#8ec07c] w-28 ml-2">GPU:</span> <span>${systemInfo.gpu}</span></div>
+            <div class="flex"><span class="text-[#8ec07c] w-28 ml-2">GPU:</span> <span>${systemInfo.gpu1}</span></div>
+            <div class="flex"><span class="text-[#8ec07c] w-28 ml-2">Memory:</span> <span>${systemInfo.memory}</span></div>
+            <div class="flex"><span class="text-[#8ec07c] w-28 ml-2">Root:</span> <span>${systemInfo.root}</span></div>
+            <div class="flex"><span class="text-[#8ec07c] w-28 ml-2">Uptime:</span> <span>${systemInfo.uptime}</span></div>
 
             <!-- Contact Information -->
             <div class="text-[#a89984] mt-2 mb-1">├──────── <span class="text-[#ebdbb2] font-bold">Contact Information</span> ─────────┤</div>
-            <div class="flex hover:text-[#fb4934] transition-colors"><span class="text-[#8ec07c] w-28 ml-2"> Email:</span> <a href="mailto:alfarizqi.stura@gmail.com">alfarizqi.stura@gmail.com</a></div>
-            <div class="flex hover:text-[#fb4934] transition-colors"><span class="text-[#8ec07c] w-28 ml-2">󰊤 Github:</span> <a href="https://github.com/architect" target="_blank">github.com/architect</a></div>
-            <div class="flex hover:text-[#fb4934] transition-colors"><span class="text-[#8ec07c] w-28 ml-2"> LinkedIn:</span> <a href="https://linkedin.com/in/alfarizqihimam" target="_blank">in/alfarizqihimam</a></div>
-            <div class="text-[#a89984]">╰────────────────────────────────────────╯</div>
+            <div class="flex hover:text-[#fb4934] transition-colors"><span class="text-[#8ec07c] w-28 ml-2">Email:</span> <a href="mailto:${systemInfo.email}">${systemInfo.email}</a></div>
+            <div class="flex hover:text-[#fb4934] transition-colors"><span class="text-[#8ec07c] w-28 ml-2">Github:</span> <a href="${systemInfo.github}" target="_blank">${systemInfo.github.replace('https://github.com/', '')}</a></div>
+            <div class="flex hover:text-[#fb4934] transition-colors"><span class="text-[#8ec07c] w-28 ml-2">LinkedIn:</span> <a href="${systemInfo.linkedin}" target="_blank">${systemInfo.linkedin.replace('https://www.linkedin.com/in/', '')}</a></div>
+            <div class="text-[#a89984]">╰──────────────────────────────────────╯</div>
             
             <!-- Color Palette Blocks -->
             <div class="mt-3 ml-2 flex gap-2">
@@ -78,19 +84,25 @@ export const skills = (file) => {
 
 export const project = (file) => {
     let code = '';
-    const stackList = (file.stack || []).map(s => `        "${s}"`).join(',\n');
-    const featureList = (file.features || []).map(f => `        "${f}"`).join(',\n');
-    
+
     if (file.language === 'rust') {
-        code = `struct Project {\n    name: "${file.title}",\n    description: "${file.description}",\n    stack: [\n${stackList}\n    ],\n    features: [\n${featureList}\n    ]\n}`;
+        const stackList = (file.stack || []).map(s => `        String::from("${s}"),`).join('\n');
+        const featureList = (file.features || []).map(f => `        String::from("${f}"),`).join('\n');
+        const varName = file.filename.split('.')[0].replace(/[^a-z0-9]/gi, '_').toLowerCase();
+
+        code = `#[derive(Debug, Serialize)]\npub struct Project {\n    pub name: String,\n    pub description: String,\n    pub stack: Vec<String>,\n    pub features: Vec<String>,\n    pub github: Option<String>,\n}\n\nfn get_${varName}_info() -> Project {\n    Project {\n        name: String::from("${file.title}"),\n        description: String::from("${file.description}"),\n        stack: vec![\n${stackList}\n        ],\n        features: vec![\n${featureList}\n        ],\n        github: Some(String::from("${file.github || ''}")),\n    }\n}`;
     } else if (file.language === 'php') {
-        const phpStack = (file.stack || []).map(s => `        '${s}'`).join(',\n');
-        code = `class Project\n{\n    public string $name = '${file.title}';\n    public string $description = '${file.description}';\n    public array $stack = [\n${phpStack}\n    ];\n}`;
+        const phpStack = (file.stack || []).map(s => `        '${s}',`).join('\n');
+        const phpFeatures = (file.features || []).map(f => `        '${f}',`).join('\n');
+
+        code = `<?php\n\nnamespace App\\Models;\n\nuse Illuminate\\Database\\Eloquent\\Model;\n\nclass Project extends Model\n{\n    protected $fillable = [\n        'name',\n        'description',\n        'stack',\n        'features',\n        'github_url'\n    ];\n\n    public function getProjectDetails(): array\n    {\n        return [\n            'name' => '${file.title}',\n            'description' => '${file.description}',\n            'stack' => [\n${phpStack}\n            ],\n            'features' => [\n${phpFeatures}\n            ],\n            'github_url' => '${file.github || ''}'\n        ];\n    }\n}`;
     } else if (file.language === 'javascript') {
-        const jsStack = (file.stack || []).map(s => `        '${s}'`).join(',\n');
-        code = `const project = {\n    name: '${file.title}',\n    description: '${file.description}',\n    stack: [\n${jsStack}\n    ]\n};`;
+        const jsStack = (file.stack || []).map(s => `        '${s}',`).join('\n');
+        const jsFeatures = (file.features || []).map(f => `        '${f}',`).join('\n');
+
+        code = `/**\n * Defines the ${file.title} project configuration.\n * @module config/projects\n */\n\nexport const projectConfig = {\n    name: '${file.title}',\n    description: '${file.description}',\n    stack: [\n${jsStack}\n    ],\n    features: [\n${jsFeatures}\n    ],\n    repository: '${file.github || ''}',\n    \n    init() {\n        console.log(\`Initializing \${this.name}...\`);\n        return this.stack.length > 0;\n    }\n};\n\nexport default projectConfig;`;
     } else {
-        code = `Project: ${file.title}\nDescription: ${file.description}\nStack: ${(file.stack||[]).join(', ')}`;
+        code = `Project: ${file.title}\nDescription: ${file.description}\nStack: ${(file.stack || []).join(', ')}`;
     }
     return applySyntax(file.language, code);
 };
@@ -104,9 +116,10 @@ export const url = (file) => {
 };
 
 export const resume = (file) => {
-    const exp = file.content.experience.map(e => `- ${e}`).join('\n');
-    const edu = file.content.education.map(e => `- ${e}`).join('\n');
-    const ach = file.content.achievements.map(e => `- ${e}`).join('\n');
+    const exp = (file.content.experience || []).map(e => `- ${e}`).join('\n');
+    const edu = (file.content.education || []).map(e => `- ${e}`).join('\n');
+    const ach = (file.content.achievements || []).map(e => `- ${e}`).join('\n');
+    
     const rawText = `RESUME\n\nEXPERIENCE\n${exp}\n\nEDUCATION\n${edu}\n\nACHIEVEMENTS\n${ach}`;
     return applySyntax(file.language || 'text', rawText);
 };
