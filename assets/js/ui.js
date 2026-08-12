@@ -1,60 +1,47 @@
-import { state, selectSidebar, selectNavigator, openItem } from './state.js';
+import { state, getParentFolder, getCurrentFolder, getSelectedItem, getVisibleChildren, selectParentItem, selectCurrentItem, goIn, openItem } from './state.js';
 import { renderers } from './renderers/index.js';
 
 export const updateUI = () => {
-    let currentTree = state.tree;
-    if (state.searchQuery) {
-        currentTree = currentTree.filter(item => item.name.toLowerCase().includes(state.searchQuery.toLowerCase()));
-    }
+    const parentFolder = getParentFolder();
+    const currentFolder = getCurrentFolder();
+    const selectedItem = getSelectedItem();
 
-    renderSidebar(currentTree);
+    renderSidebar(parentFolder);
+    renderNavigator(currentFolder);
+    renderViewer(selectedItem);
     
-    const parentFolder = state.sidebarIndex >= 0 ? currentTree[state.sidebarIndex] : null;
-    if (parentFolder) {
-        renderNavigator(parentFolder);
-        renderViewer(parentFolder);
-        updateBreadcrumb(parentFolder);
-    } else {
-        document.getElementById('navigator').innerHTML = '';
-        renderViewer(null);
-        document.getElementById('breadcrumb').textContent = '~/portfolio';
-    }
-
+    updateBreadcrumb();
     renderOverlays();
-    renderStatusBar(parentFolder, currentTree);
+    renderStatusBar(selectedItem, currentFolder);
     updatePanelsLayout();
 };
 
-const renderSidebar = (currentTree) => {
+const renderSidebar = (parentFolder) => {
     const sidebar = document.getElementById('sidebar');
     sidebar.innerHTML = '';
     
-    currentTree.forEach((item, index) => {
-        if (item.hidden && !state.showHidden) return;
+    if (!parentFolder) return; // Empty left panel at root
 
+    const visibleItems = getVisibleChildren(parentFolder);
+    // Which item in the parent is the currentFolder?
+    // The index is state.path[state.path.length - 2]
+    const activeIndex = state.path.length >= 2 ? state.path[state.path.length - 2] : -1;
+
+    visibleItems.forEach((item, index) => {
         const div = document.createElement('div');
-        const isSelected = index === state.sidebarIndex;
-        const isActivePanel = state.activePanel === 'sidebar';
-
-        const hiddenClass = item.hidden ? 'opacity-60 italic' : '';
+        const isSelected = index === activeIndex;
         
-        let bgClass = isSelected ? (isActivePanel ? 'bg-[#3c3836]' : 'bg-[#3c3836]') : 'hover:bg-[#3c3836]';
-        let textClass = isSelected ? 'text-[#fabd2f]' : 'text-[#ebdbb2]';
+        let bgClass = isSelected ? 'bg-[#3c3836]' : 'hover:bg-[#3c3836]';
+        let textClass = isSelected ? 'text-[#ebdbb2] font-bold' : 'text-[#a89984]';
         
-        div.className = `cursor-pointer px-2 py-1 flex items-center gap-2 ${bgClass} ${textClass} ${hiddenClass}`;
+        div.className = `cursor-pointer px-2 py-1 flex items-center gap-2 ${bgClass} ${textClass}`;
         div.innerHTML = `
-            <span class="text-[#83a598]">${item.icon || '📄'}</span>
-            <span>${item.name}</span>
+            <span class="text-[#83a598] opacity-75">${item.icon || '📄'}</span>
+            <span class="whitespace-nowrap overflow-hidden text-ellipsis">${item.filename || item.name}</span>
         `;
         
-        // Single source of truth for clicks
         div.addEventListener('click', () => {
-            selectSidebar(index);
-            updateUI();
-        });
-        div.addEventListener('dblclick', () => {
-            selectSidebar(index);
-            openItem();
+            selectParentItem(index);
             updateUI();
         });
 
@@ -62,59 +49,45 @@ const renderSidebar = (currentTree) => {
     });
 };
 
-const renderNavigator = (parentFolder) => {
+const renderNavigator = (currentFolder) => {
     const nav = document.getElementById('navigator');
     nav.innerHTML = '';
     
-    if (parentFolder.type !== 'folder' || !parentFolder.children) {
-        const div = document.createElement('div');
-        const isSelected = state.navigatorIndex === 0;
-        const isActivePanel = state.activePanel === 'navigator';
-        
-        let bgClass = isSelected ? 'bg-[#3c3836]' : 'hover:bg-[#3c3836]';
-        let textClass = isSelected ? (isActivePanel ? 'text-[#fabd2f]' : 'text-[#ebdbb2]') : 'text-[#ebdbb2]';
-        
-        div.className = `cursor-pointer px-2 py-1 flex items-center gap-2 ${bgClass} ${textClass}`;
-        div.innerHTML = `
-            <span class="text-[#83a598]">${parentFolder.icon || '📄'}</span>
-            <span>${parentFolder.filename || parentFolder.name}</span>
-        `;
-        div.addEventListener('click', () => {
-            selectSidebar(state.sidebarIndex); // Ensure sidebar is active item
-            selectNavigator(0);
-            updateUI();
-        });
-        div.addEventListener('dblclick', () => {
-            selectNavigator(0);
-            openItem();
-            updateUI();
-        });
-        nav.appendChild(div);
+    const visibleItems = getVisibleChildren(currentFolder);
+    const activeIndex = state.path[state.path.length - 1];
+
+    if (visibleItems.length === 0) {
+        nav.innerHTML = `<div class="p-2 text-[#928374] text-xs italic">Empty</div>`;
         return;
     }
 
-    parentFolder.children.forEach((item, index) => {
+    visibleItems.forEach((item, index) => {
         const div = document.createElement('div');
-        const isSelected = index === state.navigatorIndex;
-        const isActivePanel = state.activePanel === 'navigator';
+        const isSelected = index === activeIndex;
         
         let bgClass = isSelected ? 'bg-[#3c3836]' : 'hover:bg-[#3c3836]';
-        let textClass = isSelected ? (isActivePanel ? 'text-[#fabd2f]' : 'text-[#ebdbb2]') : 'text-[#ebdbb2]';
+        let textClass = isSelected ? 'text-[#fabd2f] font-bold' : 'text-[#ebdbb2]';
         
         div.className = `cursor-pointer px-2 py-1 flex items-center gap-2 ${bgClass} ${textClass}`;
         const num = (index + 1).toString().padStart(2, '0');
+        
+        // If it's a folder, maybe show a little indicator like Yazi
+        const isFolder = item.type === 'folder';
+        const folderArrow = isFolder ? '<span class="ml-auto text-[#928374]">▶</span>' : '';
+
         div.innerHTML = `
             <span class="text-[#504945] text-xs mr-1">${num}</span>
             <span class="text-[#83a598]">${item.icon || '📄'}</span>
             <span class="whitespace-nowrap overflow-hidden text-ellipsis">${item.filename || item.name}</span>
+            ${folderArrow}
         `;
+        
         div.addEventListener('click', () => {
-            selectSidebar(state.sidebarIndex);
-            selectNavigator(index);
+            selectCurrentItem(index);
             updateUI();
         });
         div.addEventListener('dblclick', () => {
-            selectNavigator(index);
+            selectCurrentItem(index);
             openItem();
             updateUI();
         });
@@ -122,55 +95,64 @@ const renderNavigator = (parentFolder) => {
     });
 };
 
-const renderViewer = (parentFolder) => {
+const renderViewer = (selectedItem) => {
     const viewer = document.getElementById('viewer');
     
     viewer.classList.remove('fade-in');
     void viewer.offsetWidth;
     viewer.classList.add('fade-in');
 
-    if (state.sidebarIndex === -1) {
-        viewer.innerHTML = renderers.root();
-        return;
-    }
-
-    let file = null;
-    if (parentFolder.type !== 'folder') {
-        file = parentFolder;
-    } else if (parentFolder.children && parentFolder.children.length > 0) {
-        file = parentFolder.children[state.navigatorIndex];
-    }
-
-    if (!file) {
-        viewer.innerHTML = `<div class="p-4 text-[#928374]">// No file selected</div>`;
-        return;
-    }
-
-    const renderer = renderers[file.type];
-    if (renderer) {
-        viewer.innerHTML = renderer(file);
-    } else {
-        viewer.innerHTML = `<div class="p-4 text-[#fb4934]">// Unknown renderer type: ${file.type}</div>`;
-    }
-};
-
-const updateBreadcrumb = (parentFolder) => {
-    let path = '~/portfolio';
-    if (state.sidebarIndex !== -1) {
-        path += `/${parentFolder.name.toLowerCase()}`;
-        if (parentFolder.children && parentFolder.children.length > 0) {
-            const child = parentFolder.children[state.navigatorIndex];
-            if (child) path += `/${child.filename || child.name}`;
-        } else if (parentFolder.filename) {
-            // Already appended folder name, but since it's a file, let's replace or adjust
-            // If it's a root file like Profile -> profile.rs
-            path = `~/portfolio/${parentFolder.filename}`;
+    if (!selectedItem) {
+        if (state.path.length === 1 && state.path[0] === -1) {
+            viewer.innerHTML = renderers.root();
+        } else {
+            viewer.innerHTML = `<div class="p-4 text-[#928374]">// Empty</div>`;
         }
+        return;
     }
-    document.getElementById('breadcrumb').textContent = path;
+
+    // If selected item is a folder, we might preview its contents like Yazi does
+    if (selectedItem.type === 'folder') {
+        const children = getVisibleChildren(selectedItem);
+        let html = `<div class="p-4 font-mono text-[#a89984]"><h3 class="text-[#fabd2f] font-bold mb-4 border-b border-[#504945] pb-2">📁 ${selectedItem.name}</h3>`;
+        if (children.length === 0) {
+            html += `<div class="text-[#928374]">Empty directory</div>`;
+        } else {
+            children.forEach(c => {
+                html += `<div class="flex gap-2 mb-1"><span class="text-[#83a598] w-6">${c.icon || '📄'}</span><span>${c.filename || c.name}</span></div>`;
+            });
+        }
+        html += `</div>`;
+        viewer.innerHTML = html;
+        return;
+    }
+
+    const renderer = renderers[selectedItem.type];
+    if (renderer) {
+        viewer.innerHTML = renderer(selectedItem);
+    } else {
+        viewer.innerHTML = `<div class="p-4 text-[#fb4934]">// Unknown renderer type: ${selectedItem.type}</div>`;
+    }
 };
 
-const renderStatusBar = (parentFolder, currentTree) => {
+const updateBreadcrumb = () => {
+    let pathStr = '~/portfolio';
+    let current = { children: state.tree };
+    
+    // reconstruct the path names
+    for (let i = 0; i < state.path.length; i++) {
+        const index = state.path[i];
+        if (index === -1) break;
+        const visible = getVisibleChildren(current);
+        const item = visible[index];
+        if (!item) break;
+        pathStr += `/${item.filename || item.name}`;
+        current = item;
+    }
+    document.getElementById('breadcrumb').textContent = pathStr;
+};
+
+const renderStatusBar = (selectedItem, currentFolder) => {
     const modeIndicator = document.getElementById('status-mode');
     if (state.commandMode) {
         modeIndicator.textContent = 'COMMAND';
@@ -184,25 +166,22 @@ const renderStatusBar = (parentFolder, currentTree) => {
     }
 
     let fileType = 'dir';
-    let fileName = 'portfolio';
+    let fileName = currentFolder.name || 'portfolio';
+    let activePanel = state.fullscreen ? 'viewer' : 'navigator';
 
-    if (state.sidebarIndex === -1) {
-        fileType = 'dir';
-        fileName = 'portfolio';
-    } else if (state.activePanel === 'navigator') {
-        const file = parentFolder.children ? parentFolder.children[state.navigatorIndex] : parentFolder;
-        if (file) {
-            fileType = file.type;
-            fileName = file.filename || file.name;
-        }
-    } else if (state.activePanel === 'sidebar' && parentFolder) {
-        fileType = parentFolder.type;
-        fileName = parentFolder.filename || parentFolder.name;
+    if (selectedItem) {
+        fileType = selectedItem.type;
+        fileName = selectedItem.filename || selectedItem.name;
+    }
+
+    // Add hidden indicator
+    if (state.showHidden) {
+        activePanel += ' [HIDDEN ON]';
     }
 
     document.getElementById('status-file').textContent = fileName;
     document.getElementById('status-type').textContent = fileType.toUpperCase();
-    document.getElementById('status-panel').textContent = state.activePanel;
+    document.getElementById('status-panel').textContent = activePanel;
 };
 
 const renderOverlays = () => {
@@ -217,13 +196,15 @@ const renderOverlays = () => {
                 <div class="grid grid-cols-2 gap-y-2 text-sm">
                     <div class="text-[#83a598]">↑ ↓ ← →</div><div>Navigation</div>
                     <div class="text-[#83a598]">h j k l</div><div>Vim Navigation</div>
-                    <div class="text-[#83a598]">Enter</div><div>Open folder / file</div>
-                    <div class="text-[#83a598]">o</div><div>Open / Fullscreen</div>
-                    <div class="text-[#83a598]">/</div><div>Search</div>
-                    <div class="text-[#83a598]">:</div><div>Command</div>
+                    <div class="text-[#83a598]">Enter / l</div><div>Enter folder / open file</div>
+                    <div class="text-[#83a598]">h</div><div>Go back to parent folder</div>
+                    <div class="text-[#83a598]">o</div><div>Open URL / Fullscreen</div>
+                    <div class="text-[#83a598]">.</div><div>Toggle hidden files</div>
+                    <div class="text-[#83a598]">/</div><div>Search in current folder</div>
+                    <div class="text-[#83a598]">:</div><div>Command palette</div>
                     <div class="text-[#83a598]">r</div><div>Reload JSON</div>
                     <div class="text-[#83a598]">?</div><div>Help</div>
-                    <div class="text-[#83a598]">Esc / q</div><div>Close Overlay</div>
+                    <div class="text-[#83a598]">Esc / q</div><div>Close / Go back</div>
                 </div>
             </div>
         `;
@@ -265,13 +246,11 @@ const updatePanelsLayout = () => {
         viewer.classList.replace('flex-1', 'w-full');
     } else {
         if (window.innerWidth < 768) {
+            // Mobile: only show navigator
             sidebar.classList.add('hidden');
-            navigator.classList.add('hidden');
             viewer.classList.add('hidden');
-
-            if (state.activePanel === 'sidebar') sidebar.classList.remove('hidden');
-            if (state.activePanel === 'navigator') navigator.classList.remove('hidden');
-            if (state.activePanel === 'viewer') viewer.classList.remove('hidden');
+            navigator.classList.remove('hidden');
+            navigator.className = 'w-full flex flex-col bg-[#1d2021] transition-all duration-200';
         } else {
             sidebar.classList.remove('hidden');
             navigator.classList.remove('hidden');

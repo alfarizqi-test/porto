@@ -137,5 +137,6 @@ export const renderers = {
     project,
     url,
     resume,
-    file
+    file,
+    text: file
 };

@@ -1,110 +1,70 @@
 [
   {
     "name": ".config",
+    "filename": ".config",
     "type": "folder",
-    "icon": "🔒",
-    "hidden": true,
+    "icon": "⚙️",
     "children": [
+      {
+        "name": "yazi.toml",
+        "filename": "yazi.toml",
+        "type": "text",
+        "language": "toml",
+        "icon": "📄",
+        "content": "[manager]\nratio = [ 1, 2, 4 ]\nsort_by = \"alphabetical\"\nsort_sensitive = false\n\n[preview]\ntab_size = 4\nmax_width = 600\nmax_height = 900"
+      },
       {
         "name": "hyprland.conf",
         "filename": "hyprland.conf",
-        "type": "file",
+        "type": "text",
         "language": "text",
-        "icon": "🪟",
-        "content": "# Architect's Hyprland Config\n# Less is more. Built for maximum efficiency.\n\nmonitor=,preferred,auto,1\nexec-once = waybar & hyprpaper\n\n# Core bindings\nbind = SUPER, Return, exec, kitty\nbind = SUPER, C, killactive,\nbind = SUPER, M, exit,\n\n# Note to recruiter/visitor:\n# I prefer building and configuring my own desktop environment from scratch\n# to fully understand how the underlying X11/Wayland systems interact."
+        "icon": "📄",
+        "content": "monitor=,preferred,auto,auto\n\nexec-once = waybar & hyprpaper\n\nbind = SUPER, Q, exec, kitty\nbind = SUPER, C, killactive,\nbind = SUPER, M, exit,"
       }
     ]
   },
   {
-    "name": ".env",
-    "filename": ".env",
-    "type": "file",
-    "language": "toml",
-    "icon": "🔑",
-    "hidden": true,
-    "content": "APP_NAME=\"Alfarizqi_Portfolio_TUI\"\nAPP_ENV=\"production\"\nAPP_DEBUG=false\n\nDB_CONNECTION=\"supabase\"\nDB_DATABASE=\"umkm\"\n\n# --- EASTER EGG ---\n# Congratulations on finding the hidden dotfiles!\n# You clearly know your way around a Linux filesystem.\n\nCURRENT_STATUS=\"Open to Opportunities & Scholarships\"\nCOFFEE_INTAKE=\"Critical\"\nSYSTEM_ARCHITECTURE=\"Overclocked\""
-  },
-  {
     "name": ".bash_history",
     "filename": ".bash_history",
-    "type": "file",
+    "type": "text",
     "language": "text",
     "icon": "📜",
-    "hidden": true,
-    "content": "sudo pacman -Syu\nsudo dkms install -m nvidia -v current\n\ncargo new aegis --bin\ncd aegis && cargo build --release\n\ncd ~/projects/umkm-pos\nphp artisan migrate:fresh --seed\n\ngcloud run deploy juaravibecoding-app --source .\n\necho 'Thanks for finding this file!' > /dev/stdout\nhistory -c"
+    "content": "sudo pacman -Syu\ncargo build --release\nnvim src/main.rs\nrm -rf node_modules/\nls -la\ngit push origin main"
   },
   {
-    "name": "Profile",
-    "filename": "profile.md",
+    "name": ".env",
+    "filename": ".env",
+    "type": "text",
+    "language": "text",
+    "icon": "🔒",
+    "content": "# EASTER EGG FOUND!\nUSER=architect\nSECRET_KEY=yazi_is_awesome_1337\nAPI_ENDPOINT=https://localhost:8080"
+  },
+  {
+    "name": "About",
+    "filename": "about.md",
     "type": "profile",
     "language": "markdown",
     "icon": "📄",
     "content": {
         "name": "Alfarizqi Himam Harakan",
         "role": "Backend & Infrastructure Engineer",
-        "about": "Systems enthusiast focusing on robust backend architecture, cloud deployment, and proactive security auditing. As an Arch Linux daily driver, I thrive in terminal-centric environments and strongly advocate for building minimal, highly efficient workflows over bloated abstractions. My technical journey spans from developing full-stack relational systems to exploring low-level systems programming. I am deeply passionate about uncovering vulnerabilities, optimizing server performance, and architecting secure, scalable solutions. Whether I'm configuring a tiling window manager, deploying containerized applications, or writing backend logic, my philosophy remains the same: keep it lightweight, secure, and blazingly fast.","skills": "Linux, Rust, Laravel, Security Auditing",
+        "about": "Systems enthusiast focusing on robust backend architecture, cloud deployment, and proactive security auditing. As an Arch Linux daily driver, I thrive in terminal-centric environments and strongly advocate for building minimal, highly efficient workflows over bloated abstractions. My technical journey spans from developing full-stack relational systems to exploring low-level systems programming. I am deeply passionate about uncovering vulnerabilities, optimizing server performance, and architecting secure, scalable solutions. Whether I'm configuring a tiling window manager, deploying containerized applications, or writing backend logic, my philosophy remains the same: keep it lightweight, secure, and blazingly fast.",
+        "skills": "Linux, Rust, Laravel, Security Auditing",
         "contact": "alfarizqi.stura@gmail.com"
     }
   },
   {
     "name": "Skills",
-    "type": "folder",
-    "icon": "⚙️",
-    "children": [
-      {
-        "name": "Backend",
-        "filename": "backend.json",
-        "type": "skills",
-        "language": "json",
-        "icon": "{}",
-        "content": {
-          "frameworks": ["Laravel", "Axum", "Express"],
-          "databases": ["Supabase", "PostgreSQL", "MySQL"],
-          "architecture": ["RESTful API", "MVC Pattern"],
-          "security": "SQLi & Session Hijacking Prevention"
-        }
-      },
-      {
-        "name": "Frontend",
-        "filename": "frontend.json",
-        "type": "skills",
-        "language": "json",
-        "icon": "{}",
-        "content": {
-          "frameworks": ["Next.js", "Flutter"],
-          "styling": ["Tailwind CSS", "Raw CSS3"],
-          "concept": ["Responsive Design", "TUI (Terminal UI)"]
-        }
-      },
-      {
-        "name": "Languages",
-        "filename": "languages.json",
-        "type": "skills",
-        "language": "json",
-        "icon": "{}",
-        "content": {
-          "Rust": "Systems Programming, CLI Tools, Axum",
-          "PHP": "Advanced Backend & API (Laravel)",
-          "JavaScript": "Vanilla JS, TUI Development, DOM",
-          "Dart": "Cross-platform Mobile (Flutter)",
-          "C_Lang": "Memory Management Basics"
-        }
-      },
-      {
-        "name": "Linux",
-        "filename": "linux.json",
-        "type": "skills",
-        "language": "json",
-        "icon": "{}",
-        "content": {
-          "os_daily_driver": "Arch Linux (Hyprland, Wayland)",
-          "terminal_env": "Kitty, Bash, Zellij",
-          "containerization": "Docker",
-          "cloud_deployment": "Google Cloud Run",
-          "server_management": "VPS Setup & Basic Hardening"
-        }
-      }
-    ]
+    "filename": "skills.json",
+    "type": "skills",
+    "language": "json",
+    "icon": "{}",
+    "content": {
+        "languages": ["Rust", "PHP", "JavaScript", "Dart", "C (Basics)"],
+        "backend": ["Laravel", "Axum", "REST API", "Supabase"],
+        "linux": ["Arch Linux", "Hyprland", "Bash", "Docker", "VPS Management"],
+        "frontend": ["Tailwind CSS", "Next.js", "Flutter"]
+    }
   },
   {
     "name": "Projects",
@@ -112,28 +72,54 @@
     "icon": "📁",
     "children": [
       {
-        "name": "Aegis",
-        "filename": "aegis.rs",
-        "type": "project",
-        "language": "rust",
-        "icon": "🦀",
-        "title": "Aegis - Security Auditor",
-        "description": "Lightweight passive vulnerability scanner and DevSecOps tool.",
-        "stack": ["Rust", "CLI"],
-        "github": "https://github.com/yourusername/aegis",
-        "features": ["Security Headers Check", "Ethical Safeguard Flags", "Misconfiguration Detection"]
+        "name": "rust",
+        "type": "folder",
+        "icon": "📁",
+        "children": [
+          {
+            "name": "Aegis",
+            "filename": "aegis.rs",
+            "type": "project",
+            "language": "rust",
+            "icon": "🦀",
+            "title": "Aegis - Security Auditor",
+            "description": "Lightweight passive vulnerability scanner and DevSecOps tool.",
+            "stack": ["Rust", "CLI"],
+            "github": "https://github.com/yourusername/aegis",
+            "features": ["Security Headers Check", "Ethical Safeguard Flags", "Misconfiguration Detection"]
+          },
+          {
+            "name": "Rakshaka",
+            "filename": "rakshaka.rs",
+            "type": "project",
+            "language": "rust",
+            "icon": "🦀",
+            "title": "Rakshaka",
+            "description": "Rust Backend Link Checker",
+            "stack": ["Rust", "Axum", "SQLx"],
+            "github": "https://github.com/example/rakshaka",
+            "features": ["SSRF Protection", "Local DB check"]
+          }
+        ]
       },
       {
-        "name": "UMKM POS",
-        "filename": "umkm-pos.php",
-        "type": "project",
-        "language": "php",
-        "icon": "🐘",
-        "title": "UMKM Point of Sales & Ordering",
-        "description": "Full-stack food ordering and management application.",
-        "stack": ["Laravel", "Flutter", "Supabase"],
-        "github": "https://github.com/yourusername/umkm-pos",
-        "features": ["Relational Database", "Mobile API Integration", "Real-time Sync"]
+        "name": "php",
+        "type": "folder",
+        "icon": "📁",
+        "children": [
+          {
+            "name": "UMKM POS",
+            "filename": "umkm-pos.php",
+            "type": "project",
+            "language": "php",
+            "icon": "🐘",
+            "title": "UMKM Point of Sales & Ordering",
+            "description": "Full-stack food ordering and management application.",
+            "stack": ["Laravel", "Flutter", "Supabase"],
+            "github": "https://github.com/yourusername/umkm-pos",
+            "features": ["Relational Database", "Mobile API Integration", "Real-time Sync"]
+          }
+        ]
       },
       {
         "name": "Portfolio",
@@ -141,7 +127,7 @@
         "type": "project",
         "language": "javascript",
         "icon": "💛",
-        "title": "Alfarizqi Portfolio",
+        "title": "Architect Portfolio",
         "description": "Yazi-inspired modern Terminal UI (TUI) web portfolio.",
         "stack": ["HTML", "TailwindCSS", "Vanilla JS"],
         "github": "https://github.com/yourusername/tui-portfolio",
@@ -158,36 +144,15 @@
         "name": "github.url",
         "filename": "github.url",
         "type": "url",
-        "url": "https://github.com/alfarizqi-test",
+        "url": "https://github.com/yourusername",
         "icon": "🌐"
       },
       {
         "name": "linkedin.url",
         "filename": "linkedin.url",
         "type": "url",
-        "url": "https://linkedin.com/in/alfarizqi-himam-harakan-127aaa390/",
+        "url": "https://linkedin.com/in/alfarizqihimam",
         "icon": "🌐"
-      },
-      {
-        "name": "whatsapp.url",
-        "filename": "whatsapp.url",
-        "type": "url",
-        "url": "https://wa.me/6287810011081",
-        "icon": "📱"
-      },
-      {
-        "name": "instagram.url",
-        "filename": "instagram.url",
-        "type": "url",
-        "url": "https://www.instagram.com/alfarizqi.stura/",
-        "icon": "📸"
-      },
-      {
-        "name": "twitter.url",
-        "filename": "twitter.url",
-        "type": "url",
-        "url": "https://twitter.com/alfarizqi_stura",
-        "icon": "🐦"
       }
     ]
   },

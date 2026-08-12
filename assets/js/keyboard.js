@@ -1,4 +1,4 @@
-import { state, selectSidebar, selectNavigator, openItem } from './state.js';
+import { state, goIn, goOut, openItem, getCurrentFolder, getVisibleChildren } from './state.js';
 import { updateUI } from './ui.js';
 
 export const initKeyboard = () => {
@@ -36,6 +36,7 @@ const handleKeyDown = (e) => {
         case 'Home': action = 'top'; break;
         case 'End': action = 'bottom'; break;
         case 'o': action = 'fullscreen'; break;
+        case '.': action = 'toggleHidden'; break;
         case '/': 
             if (e.shiftKey) action = 'help'; 
             else action = 'search'; 
@@ -56,61 +57,48 @@ const handleKeyDown = (e) => {
 };
 
 const executeAction = (action) => {
-    let currentTree = state.tree;
-    if (state.searchQuery) {
-        currentTree = currentTree.filter(item => item.name.toLowerCase().includes(state.searchQuery.toLowerCase()));
-    }
-
-    const parentFolder = state.sidebarIndex >= 0 ? currentTree[state.sidebarIndex] : null;
-    const children = parentFolder ? (parentFolder.children || []) : [];
+    const currentFolder = getCurrentFolder();
+    const visibleItems = getVisibleChildren(currentFolder);
+    const currentIndex = state.path[state.path.length - 1];
 
     switch(action) {
         case 'up':
-            if (state.activePanel === 'sidebar') {
-                selectSidebar(Math.max(-1, state.sidebarIndex - 1));
-            } else if (state.activePanel === 'navigator') {
-                selectNavigator(Math.max(0, state.navigatorIndex - 1));
+            if (currentIndex > (state.path.length === 1 ? -1 : 0)) {
+                state.path[state.path.length - 1]--;
             }
             break;
         case 'down':
-            if (state.activePanel === 'sidebar') {
-                selectSidebar(Math.min(currentTree.length - 1, state.sidebarIndex + 1));
-            } else if (state.activePanel === 'navigator') {
-                selectNavigator(Math.min(children.length - 1, state.navigatorIndex + 1));
+            if (currentIndex < visibleItems.length - 1) {
+                state.path[state.path.length - 1]++;
             }
             break;
         case 'left':
-            if (state.activePanel === 'navigator') {
-                selectSidebar(state.sidebarIndex);
-            } else if (state.activePanel === 'sidebar') {
-                selectSidebar(-1);
-            }
+            goOut();
             break;
         case 'right':
-            if (state.activePanel === 'sidebar') {
-                if (parentFolder && parentFolder.type === 'folder' && children.length > 0) {
-                    selectNavigator(0);
-                }
-            }
+            goIn();
             break;
         case 'open':
         case 'fullscreen':
             openItem();
             break;
         case 'top':
-            if (state.activePanel === 'sidebar') selectSidebar(0);
-            else if (state.activePanel === 'navigator') selectNavigator(0);
+            state.path[state.path.length - 1] = state.path.length === 1 ? -1 : 0;
             break;
         case 'bottom':
-            if (state.activePanel === 'sidebar') selectSidebar(currentTree.length - 1);
-            else if (state.activePanel === 'navigator') selectNavigator(children.length - 1);
+            state.path[state.path.length - 1] = visibleItems.length > 0 ? visibleItems.length - 1 : (state.path.length === 1 ? -1 : 0);
             break;
         case 'esc':
             if (state.fullscreen) {
                 state.fullscreen = false;
-            } else if (state.activePanel === 'navigator') {
-                selectSidebar(state.sidebarIndex);
+            } else if (state.path.length > 1) {
+                goOut();
             }
+            break;
+        case 'toggleHidden':
+            state.showHidden = !state.showHidden;
+            // Reset cursor to prevent out of bounds when toggling
+            state.path[state.path.length - 1] = state.path.length === 1 ? -1 : 0;
             break;
         case 'help':
             state.helpVisible = true;
@@ -118,7 +106,7 @@ const executeAction = (action) => {
         case 'search':
             state.searchMode = true;
             state.searchQuery = "";
-            selectSidebar(0);
+            state.path[state.path.length - 1] = 0; // select first when searching
             break;
         case 'command':
             state.commandMode = true;
@@ -156,7 +144,7 @@ const handleInputMode = (e) => {
         if (state.searchMode) state.searchQuery = state.searchQuery.slice(0, -1);
         if (state.commandMode) state.commandQuery = state.commandQuery.slice(0, -1);
         
-        if (state.searchMode) selectSidebar(0);
+        if (state.searchMode) state.path[state.path.length - 1] = 0;
         updateUI();
         return;
     }
@@ -164,7 +152,7 @@ const handleInputMode = (e) => {
     if (e.key.length === 1) {
         if (state.searchMode) {
             state.searchQuery += e.key;
-            selectSidebar(0);
+            state.path[state.path.length - 1] = 0;
         }
         if (state.commandMode) state.commandQuery += e.key;
         updateUI();
@@ -175,9 +163,6 @@ const executeCommand = (cmd) => {
     switch(cmd.trim()) {
         case 'reload': location.reload(); break;
         case 'help': state.helpVisible = true; break;
-        case 'top': 
-            selectSidebar(0);
-            break;
         case 'clear':
             console.clear();
             break;
